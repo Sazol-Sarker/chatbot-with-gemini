@@ -12,48 +12,52 @@ function App() {
 
   // api call to Gemini
   const generateAnswer = async () => {
+    // if(question.length===0){
+
+    // }
     setLoading(true);
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
-      contents: "Explain how ai works?",
+      contents: JSON.stringify(question),
     });
     setAnswer(response.text);
+
     setLoading(false);
 
-    console.log("Response==>", response.text);
+    // console.log("Response==>", response.text);
   };
 
   return (
     <>
       <title>Chatbot with react</title>
-      <div className="w-9/12 mx-auto">
-        <h1 className="text-3xl font-bold mb-6">ChatBot</h1>
+      <div className="w-8/12 mx-auto  p-4">
+        <h1 className="text-3xl font-bold mb-6 text-center">ChatBot</h1>
 
-        <form>
+        <form className="w-full flex flex-col items-center">
           <textarea
-            cols="50"
-            rows="10"
+            value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Enter your query..."
-            className="input input-bordered border-2 w-full"
+            className="input input-bordered border-2 w-full min-h-48 max-h-64"
           ></textarea>
 
           <button
             onClick={generateAnswer}
             type="button"
-            className="btn btn-primary border-1 mt-5"
+            className="btn btn-primary border-1 mt-5 hover:bg-gray-300  "
           >
-            {loading?"Loading...":"Generate answer"}
+            {loading ? "Loading..." : "Generate answer"}
           </button>
         </form>
 
-        {loading ? (
-          <div className="animate-pulse text-2xl mt-16 text-green-400 ">Loading...</div>
-        ) : (
-          <div className="mt-5 border-2 w-full">
-            <pre className="overflow-auto w-full h-64">{answer}</pre>
-          </div>
-        )}
+        <div className="mt-5 border-2 w-full p-4 min-h-72">
+          {!loading &&(
+            <div className="mt-5 border-2 w-full p-4">
+              <p className="font-semibold mb-5 text-center">{question}</p>
+              <p className="overflow-y-auto  max-h-72">{answer}</p>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
